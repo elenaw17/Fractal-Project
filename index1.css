@@ -1,0 +1,21 @@
+/*
+Polygon Fractals
+index.css
+Elena Wheatley
+11/24/21
+*/
+
+strong {
+    font-family: Arial;
+    font-size: 24px;
+    
+    display: inline;
+}
+
+#increaseIterations, #iterationNumber, #decreaseIterations {
+    display: inline;
+}
+
+#fractal {
+    display: block;
+}
