@@ -1,0 +1,20 @@
+/* 
+Shape Fractal Generation Test 4
+Elena Wheatley
+12/17/21
+*/
+
+strong {
+    font-family: Arial;
+    font-size: 24px;
+    
+    display: inline;
+}
+
+#increaseSides, #sideNumber, #decreasesides {
+    display: inline;
+}
+
+#polygon {
+    display: block;
+}
