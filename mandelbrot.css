@@ -1,0 +1,15 @@
+/* 
+mandelbrot.css
+Mandelbrot 2
+12/21/21
+*/
+
+p {
+    font-size: 24px;
+    display: inline-block;
+    margin: 10px;
+}
+
+canvas {
+    display: block;
+}
