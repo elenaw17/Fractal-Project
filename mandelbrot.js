@@ -16,9 +16,12 @@ var fractalCtx = fractalCanvas.getContext("2d");
 var canvasWidth = fractalCanvas.width;
 var canvasHeight = fractalCanvas.height;
 
+var shiftConstant = 0.25;
+var zoomMultiplier = 1.5;
+
 // number of pixels is 1 off from actual number
-var xPixels = 300;
-var yPixels = 300;
+var xPixels = 100;
+var yPixels = 100;
 
 var minX = -2.2;
 var maxX = 0.8;
@@ -113,7 +116,6 @@ function createPointArray(widthOfCanvas, heightOfCanvas, xRects, yRects, maxX, m
 
 createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
 
-
 function iterateMandelbrotFunction(varArray, iterations) {
         
         var j;
@@ -177,50 +179,56 @@ function generateMandelbrot(pointArray, iterations, fractalCtx) {
         zY0 = pointArray[i][1];
         
         iterationVarArray = [cX, cY, zX0, zY0, zX1, zY1];
-        
-        distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, iterations / 16);
+        distanceFromOrigin = Math.sqrt(zX0 * zX0 + zY0 * zY0);
         if (distanceFromOrigin > 2) {
-            fillColor = "rgb(50, 50, 50)";
+            fillColor = "rgb(0, 0, 0)";
         }
         else {
-            distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, 
-            iterations / 8 - iterations / 16);
-            
+            distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, iterations / 16);
             if (distanceFromOrigin > 2) {
-                fillColor = "rgb(90, 90, 90)";
+                fillColor = "rgb(50, 50, 50)";
             }
             else {
                 distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, 
-                iterations / 4 - iterations / 8);
+                iterations / 8 - iterations / 16);
                 
                 if (distanceFromOrigin > 2) {
-                    fillColor = "rgb(130, 130, 130)";
+                    fillColor = "rgb(90, 90, 90)";
                 }
                 else {
                     distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, 
-                    iterations / 2 - iterations / 4);
+                    iterations / 4 - iterations / 8);
                     
                     if (distanceFromOrigin > 2) {
-                        fillColor = "rgb(170, 170, 170)";
+                        fillColor = "rgb(130, 130, 130)";
                     }
                     else {
                         distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, 
-                        iterations - iterations / 2);
+                        iterations / 2 - iterations / 4);
                         
                         if (distanceFromOrigin > 2) {
-                            fillColor = "rgb(250, 250, 250)";
+                            fillColor = "rgb(170, 170, 170)";
                         }
-                        else if (distanceFromOrigin <= 2) {
-                            fillColor = "rgb(0, 0, 0)";
-                        }
-                        // there might be a glitch but this represents another layer outside the set
                         else {
-                            fillColor = "rgb(210, 210, 210)";
+                            distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, 
+                            iterations - iterations / 2);
+                            
+                            if (distanceFromOrigin > 2) {
+                                fillColor = "rgb(250, 250, 250)";
+                            }
+                            else if (distanceFromOrigin <= 2) {
+                                fillColor = "rgb(0, 0, 0)";
+                            }
+                            // there might be a glitch but this represents another layer outside the set
+                            else {
+                                fillColor = "rgb(210, 210, 210)";
+                            }
                         }
                     }
                 }
             }
         }
+        
         
         /*
         var distanceFromOrigin = iterateMandelbrotFunction(pointArray, iterations, i);
@@ -247,14 +255,177 @@ function generateMandelbrot(pointArray, iterations, fractalCtx) {
 
 generateMandelbrot(allPoints, functionIterations, fractalCtx);
 
-for (i = 0; i < allPoints.length; i++) {
-    //fractalCtx.rect(allPoints[i][2] - rectWidth / 2, allPoints[i][3] - rectHeight / 2, rectWidth, rectHeight);
-    fractalCtx.fillStyle = allPoints[i][4];
-    fractalCtx.fillRect(allPoints[i][2] - rectWidth / 2, allPoints[i][3] - rectHeight / 2, rectWidth, rectHeight);
-    fractalCtx.stroke();
+function drawRectangles(pointArray, ctxVar, pxWidth, pxHeight) {
+    
+for (var i = 0; i < pointArray.length; i++) {
+        ctxVar.fillStyle = pointArray[i][4];
+        ctxVar.fillRect(pointArray[i][2] - pxWidth / 2, pointArray[i][3] - pxHeight / 2, pxWidth, pxHeight);
+    }
 }
+
+drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
 
 var documentation = document.createElement("p");
 documentation.id = "documentation";
 documentation.innerHTML = allPoints.length + " rectangles";
 document.body.appendChild(documentation);
+
+// goes with zoomIn key
+// changes bounds and decreases number of rectangles to match the zoom
+function zoomIn() {
+    
+    var xRadius = (maxX - minX) / 2;
+    var yRadius = (maxY - minY) / 2;
+    var centerX = (maxX + minX) / 2;
+    var centerY = (maxY + minY) / 2;
+    
+    minX = centerX - (xRadius / zoomMultiplier);
+    maxX = centerX + (xRadius / zoomMultiplier);
+    minY = centerY - (yRadius / zoomMultiplier);
+    maxY = centerY + (yRadius / zoomMultiplier);
+    
+    createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    
+    fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+    drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
+    
+    topBound.innerHTML = maxY;
+    bottomBound.innerHTML = minY;
+    leftBound.innerHTML = minX;
+    rightBound.innerHTML = maxX;
+}
+
+// goes with zoomOut key
+// changes bounds and increases number of rectangles to match the zoom
+function zoomOut() {
+    
+    var xRadius = (maxX - minX) / 2;
+    var yRadius = (maxY - minY) / 2;
+    var centerX = (maxX + minX) / 2;
+    var centerY = (maxY + minY) / 2;
+    
+    minX = centerX - (xRadius * zoomMultiplier);
+    maxX = centerX + (xRadius * zoomMultiplier);
+    minY = centerY - (yRadius * zoomMultiplier);
+    maxY = centerY + (yRadius * zoomMultiplier);
+    
+    createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    
+    fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+    drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
+    
+    topBound.innerHTML = maxY;
+    bottomBound.innerHTML = minY;
+    leftBound.innerHTML = minX;
+    rightBound.innerHTML = maxX;
+}
+
+// goes with up key
+function shiftDown() {
+    
+    var xRadius = (maxX - minX) / 2;
+    var yRadius = (maxY - minY) / 2;
+    
+    var shift = yRadius * 2 * shiftConstant;
+    
+    minY = minY + shift;
+    maxY = maxY + shift;
+    
+    createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    
+    fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+    drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
+    
+    topBound.innerHTML = maxY;
+    bottomBound.innerHTML = minY;
+    leftBound.innerHTML = minX;
+    rightBound.innerHTML = maxX;
+}
+
+// goes with down key
+function shiftUp() {
+    
+    var xRadius = (maxX - minX) / 2;
+    var yRadius = (maxY - minY) / 2;
+    
+    var shift = -1 * yRadius * 2 * shiftConstant;
+    
+    minY = minY + shift;
+    maxY = maxY + shift;
+    
+    createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    
+    fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+    drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
+    
+    topBound.innerHTML = maxY;
+    bottomBound.innerHTML = minY;
+    leftBound.innerHTML = minX;
+    rightBound.innerHTML = maxX;
+}
+
+// goes with left key
+function shiftRight() {
+    
+    var xRadius = (maxX - minX) / 2;
+    var yRadius = (maxY - minY) / 2;
+    
+    var shift = -1 * xRadius * 2 * shiftConstant;
+    
+    minX = minX + shift;
+    maxX = maxX + shift;
+    
+    createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    
+    fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+    drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
+    
+    topBound.innerHTML = maxY;
+    bottomBound.innerHTML = minY;
+    leftBound.innerHTML = minX;
+    rightBound.innerHTML = maxX;
+}
+
+// goes with right key
+function shiftLeft() {
+    
+    var xRadius = (maxX - minX) / 2;
+    var yRadius = (maxY - minY) / 2;
+    
+    var shift = xRadius * 2 * shiftConstant;
+    
+    minX = minX + shift;
+    maxX = maxX + shift;
+    
+    createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    
+    fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+    
+    drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
+    
+    topBound.innerHTML = maxY;
+    bottomBound.innerHTML = minY;
+    leftBound.innerHTML = minX;
+    rightBound.innerHTML = maxX;
+}
+
+document.getElementById("zoomIn").addEventListener("click", zoomIn);
+document.getElementById("zoomOut").addEventListener("click", zoomOut);
+document.getElementById("up").addEventListener("click", shiftDown);
+document.getElementById("down").addEventListener("click", shiftUp);
+document.getElementById("left").addEventListener("click", shiftRight);
+document.getElementById("right").addEventListener("click", shiftLeft);
+
+
+
