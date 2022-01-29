@@ -1,6 +1,7 @@
-// mandelbrot.js
-// Mandelbrot
-// 12/21/21
+
+// Mandelbrot.js
+// Elena Wheatley
+// 1/26/22
 
 /* 
 an array of all point values that are tested
@@ -16,32 +17,40 @@ var fractalCtx = fractalCanvas.getContext("2d");
 var canvasWidth = fractalCanvas.width;
 var canvasHeight = fractalCanvas.height;
 
-var shiftConstant = 0.25;
-var zoomMultiplier = 1.5;
+var shiftConstant = 0.5;
+var zoomMultiplier = 2;
 
 // number of pixels is 1 off from actual number
-var xPixels = 100;
-var yPixels = 100;
+var xPixels = 300;
+var yPixels = 300;
 
-var minX = -2.2;
-var maxX = 0.8;
-var minY = -1.5;
-var maxY = 1.5;
+var juliaSet = false;
+var juliaSetCoord = [-0.5, 0.5];
 
-var rectWidth = canvasWidth / xPixels;
-var rectHeight = canvasHeight / yPixels;
-
-/*
-// bounds for julia set
-minX = -2;
-maxX = 2;
-minY = -2;
-maxY = 2;
-*/
+if (juliaSet) {
+    var minX = -2;
+    var maxX = 2;
+    var minY = -2;
+    var maxY = 2;
+}
+else {
+    var minX = -2.2;
+    var maxX = 0.8;
+    var minY = -1.5;
+    var maxY = 1.5;
+}
 
 var boundsArray = [minX, maxX, minY, maxY];
 
-var functionIterations = 32;
+var rectWidth = canvasWidth / xPixels + 1;
+var rectHeight = canvasHeight / yPixels + 1;
+
+var functionIterations = 28;
+var iterationsToDoAtOnce = 1;
+
+var documentation = document.createElement("p");
+documentation.id = "documentation";
+document.body.appendChild(documentation);
 
 var i;
 
@@ -114,20 +123,9 @@ function createPointArray(widthOfCanvas, heightOfCanvas, xRects, yRects, maxX, m
     }
 }
 
-createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
-
 function iterateMandelbrotFunction(varArray, iterations) {
         
         var j;
-
-        /*
-        // for julia set:
-        cX = -1;
-        cY = 0;
-        zX0 = pointArray[i][0];
-        zY0 = pointArray[i][1];
-        */
-        
         // iterate z = z^2 + c
         // (x + iy)^2 = (x^2 - y^2) + i(2xy)
         for (j = 0; j < iterations; j++) {
@@ -149,9 +147,10 @@ function iterateMandelbrotFunction(varArray, iterations) {
     return totalDistance;
 }
 
-function generateMandelbrot(pointArray, iterations, fractalCtx) {
+function generateMandelbrot(pointArray, iterations, fractalCtx, iterationAddition, juliaSet, juliaSetCoord) {
     
     var i;
+    var j;
 
     // these are the x and y values of the constants
     var cX;
@@ -172,8 +171,14 @@ function generateMandelbrot(pointArray, iterations, fractalCtx) {
     // iterating through each pixel
     for (i = 0; i < pointArray.length; i++) {
         
-        cX = pointArray[i][0];
-        cY = pointArray[i][1];
+        if (juliaSet) {
+            cX = juliaSetCoord[0];
+            cY = juliaSetCoord[1];
+        }
+        else {
+            cX = pointArray[i][0];
+            cY = pointArray[i][1];
+        }
         
         zX0 = pointArray[i][0];
         zY0 = pointArray[i][1];
@@ -181,79 +186,69 @@ function generateMandelbrot(pointArray, iterations, fractalCtx) {
         iterationVarArray = [cX, cY, zX0, zY0, zX1, zY1];
         distanceFromOrigin = Math.sqrt(zX0 * zX0 + zY0 * zY0);
         if (distanceFromOrigin > 2) {
-            fillColor = "rgb(0, 0, 0)";
+            fillColor = "hsl(0, 70%, 50%)";
         }
         else {
-            distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, iterations / 16);
-            if (distanceFromOrigin > 2) {
-                fillColor = "rgb(50, 50, 50)";
-            }
-            else {
-                distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, 
-                iterations / 8 - iterations / 16);
-                
+            var colorSelector;
+            for (j = 0; j < iterations && distanceFromOrigin < 2; j += iterationAddition) {
+                distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, iterationAddition);
                 if (distanceFromOrigin > 2) {
-                    fillColor = "rgb(90, 90, 90)";
-                }
-                else {
-                    distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, 
-                    iterations / 4 - iterations / 8);
-                    
-                    if (distanceFromOrigin > 2) {
-                        fillColor = "rgb(130, 130, 130)";
-                    }
-                    else {
-                        distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, 
-                        iterations / 2 - iterations / 4);
-                        
-                        if (distanceFromOrigin > 2) {
-                            fillColor = "rgb(170, 170, 170)";
-                        }
-                        else {
-                            distanceFromOrigin = iterateMandelbrotFunction(iterationVarArray, 
-                            iterations - iterations / 2);
-                            
-                            if (distanceFromOrigin > 2) {
-                                fillColor = "rgb(250, 250, 250)";
-                            }
-                            else if (distanceFromOrigin <= 2) {
-                                fillColor = "rgb(0, 0, 0)";
-                            }
-                            // there might be a glitch but this represents another layer outside the set
-                            else {
-                                fillColor = "rgb(210, 210, 210)";
-                            }
-                        }
+                    colorSelector = (j / iterationAddition) % 14;
+                    switch (colorSelector) {
+                        case 0: 
+                        fillColor = "hsl(0, 70%, 50%)";
+                        break;
+                        case 1: 
+                        fillColor = "hsl(15, 70%, 50%)";
+                        break;
+                        case 2: 
+                        fillColor = "hsl(30, 70%, 50%)";
+                        break;
+                        case 3: 
+                        fillColor = "hsl(45, 70%, 50%)";
+                        break;
+                        case 4: 
+                        fillColor = "hsl(60, 70%, 50%)";
+                        break;
+                        case 5: 
+                        fillColor = "hsl(90, 70%, 50%)";
+                        break;
+                        case 6: 
+                        fillColor = "hsl(120, 70%, 50%)";
+                        break;
+                        case 7: 
+                        fillColor = "hsl(150, 70%, 50%)";
+                        break;
+                        case 8: 
+                        fillColor = "hsl(180, 70%, 50%)";
+                        break;
+                        case 9: 
+                        fillColor = "hsl(210, 70%, 50%)";
+                        break;
+                        case 10: 
+                        fillColor = "hsl(240, 70%, 50%)";
+                        break;
+                        case 11: 
+                        fillColor = "hsl(270, 70%, 50%)";
+                        break;
+                        case 12: 
+                        fillColor = "hsl(300, 70%, 50%)";
+                        break;
+                        case 13: 
+                        fillColor = "hsl(330, 70%, 50%)";
+                        break;
+                        default: 
+                        fillColor = "white";
                     }
                 }
             }
+            if (distanceFromOrigin < 2) {
+                fillColor = "black";
+            }
         }
-        
-        
-        /*
-        var distanceFromOrigin = iterateMandelbrotFunction(pointArray, iterations, i);
-        
-        if (distanceFromOrigin <= 2) {
-            fillColor = "rgb(0, 0, 0)";
-        }
-        else if (iterateMandelbrotFunction(pointArray, iterations / 2, i) <= 2) {
-            fillColor = "rgb(255, 0, 0)";
-        }
-        else if (iterateMandelbrotFunction(pointArray, iterations / 4, i) <= 2) {
-            fillColor = "orange";
-        }
-        else if (iterateMandelbrotFunction(pointArray, iterations / 8, i) <= 2) {
-            fillColor = "yellow";
-        }
-        else {
-            fillColor = "white";
-        }
-        */
         pointArray[i].push(fillColor);
     }
 }
-
-generateMandelbrot(allPoints, functionIterations, fractalCtx);
 
 function drawRectangles(pointArray, ctxVar, pxWidth, pxHeight) {
     
@@ -263,12 +258,6 @@ for (var i = 0; i < pointArray.length; i++) {
     }
 }
 
-drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
-
-var documentation = document.createElement("p");
-documentation.id = "documentation";
-documentation.innerHTML = allPoints.length + " rectangles";
-document.body.appendChild(documentation);
 
 // goes with zoomIn key
 // changes bounds and decreases number of rectangles to match the zoom
@@ -285,7 +274,7 @@ function zoomIn() {
     maxY = centerY + (yRadius / zoomMultiplier);
     
     createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
-    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx, iterationsToDoAtOnce);
     
     fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
     
@@ -312,7 +301,7 @@ function zoomOut() {
     maxY = centerY + (yRadius * zoomMultiplier);
     
     createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
-    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx, iterationsToDoAtOnce, juliaSet, juliaSetCoord);
     
     fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
     
@@ -336,7 +325,7 @@ function shiftDown() {
     maxY = maxY + shift;
     
     createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
-    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx, iterationsToDoAtOnce);
     
     fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
     
@@ -360,7 +349,7 @@ function shiftUp() {
     maxY = maxY + shift;
     
     createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
-    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx, iterationsToDoAtOnce);
     
     fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
     
@@ -384,7 +373,7 @@ function shiftRight() {
     maxX = maxX + shift;
     
     createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
-    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx, iterationsToDoAtOnce);
     
     fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
     
@@ -408,7 +397,7 @@ function shiftLeft() {
     maxX = maxX + shift;
     
     createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
-    generateMandelbrot(allPoints, functionIterations, fractalCtx);
+    generateMandelbrot(allPoints, functionIterations, fractalCtx, iterationsToDoAtOnce);
     
     fractalCtx.clearRect(0, 0, canvasWidth, canvasHeight);
     
@@ -419,6 +408,12 @@ function shiftLeft() {
     leftBound.innerHTML = minX;
     rightBound.innerHTML = maxX;
 }
+
+createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
+generateMandelbrot(allPoints, functionIterations, fractalCtx, iterationsToDoAtOnce, juliaSet, juliaSetCoord);
+drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
+
+documentation.innerHTML = allPoints.length + " rectangles";
 
 document.getElementById("zoomIn").addEventListener("click", zoomIn);
 document.getElementById("zoomOut").addEventListener("click", zoomOut);
