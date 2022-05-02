@@ -1,0 +1,29 @@
+<!-- 
+Sierpinski Carpet
+Elena Wheatley
+5/1/22
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sierpinski Carpet</title>
+    </head>
+    <body>
+
+        <svg id="decreaseIterations" style="border: 1px solid black;" width="32px" height="32px">
+            <polygon points="4,13 28,13 28,19 4,19"></polygon>
+        </svg>        
+        <p id="iterationCount"></p>
+        <svg id="increaseIterations" style="border: 1px solid black;" width="32px" height="32px">
+            <polygon points="13,4 19,4 19,13 28,13 28,19 19,19 
+            19,28 13,28 13,19 4,19 4,13 13,13"></polygon>
+        </svg>
+        
+        <svg id="fractalContainer" width="400" height="400" style="border: 1px solid black">
+            <polygon id="fractal"></polygon>
+        </svg>
+        <script src="/Resources/JS/sierpinski_carpet2.js"></script>
+    </body>
+</html>
+

@@ -1,0 +1,30 @@
+<!-- 
+Shape Fractal SVG (test 5?)
+Elena Wheatley
+5/1/22
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Shape Fractal SVG</title>
+    </head>
+    <body>
+
+        
+        <svg id="decreaseIterations" style="border: 1px solid black;" width="32px" height="32px">
+            <polygon points="4,13 28,13 28,19 4,19"></polygon>
+        </svg>
+        <p id="iterationCount"></p>
+        <svg id="increaseIterations" style="border: 1px solid black;" width="32px" height="32px">
+            <polygon points="13,4 19,4 19,13 28,13 28,19 19,19 
+            19,28 13,28 13,19 4,19 4,13 13,13"></polygon>
+        </svg>
+        
+        <svg id="shapeFractal" width="400" height="400" style="border: 1px solid black; fill-rule: nonzero">
+            <polygon id="poly1"></polygon>
+        </svg>
+        <script src="Resources/JS/polygon_fractal2.js"></script>
+    </body>
+</html>
+
