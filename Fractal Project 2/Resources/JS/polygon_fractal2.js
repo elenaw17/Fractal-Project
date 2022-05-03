@@ -124,4 +124,3 @@ iterationCount.innerHTML = allIterations;
 
 increaseIterations.addEventListener("click", increaseFractalIterations);
 decreaseIterations.addEventListener("click", decreaseFractalIterations);
-

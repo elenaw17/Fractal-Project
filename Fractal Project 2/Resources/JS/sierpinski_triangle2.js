@@ -207,4 +207,3 @@ iteration_count.innerHTML = total_iterations;
 drawSierpinskiTriangle(fractal_var, point_array, center_x, center_y, first_radius, 
 radius_divisor, completed_iterations, total_iterations + 2);
 iteration_count.innerHTML = total_iterations;
-

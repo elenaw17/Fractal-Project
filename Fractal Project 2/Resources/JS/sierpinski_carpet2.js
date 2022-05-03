@@ -153,4 +153,3 @@ point_string = convertPointArrayToString(point_array[total_iterations - 1]);
 //documentation.innerHTML = point_string;
 
 fractal_var.setAttribute("points", point_string); 
-

@@ -280,10 +280,12 @@ function zoomIn() {
     
     drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
     
+    /*
     topBound.innerHTML = maxY;
     bottomBound.innerHTML = minY;
     leftBound.innerHTML = minX;
     rightBound.innerHTML = maxX;
+    */
 }
 
 // goes with zoomOut key
@@ -307,10 +309,12 @@ function zoomOut() {
     
     drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
     
+    /*
     topBound.innerHTML = maxY;
     bottomBound.innerHTML = minY;
     leftBound.innerHTML = minX;
     rightBound.innerHTML = maxX;
+    */
 }
 
 // goes with up key
@@ -331,10 +335,12 @@ function shiftDown() {
     
     drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
     
+    /*
     topBound.innerHTML = maxY;
     bottomBound.innerHTML = minY;
     leftBound.innerHTML = minX;
     rightBound.innerHTML = maxX;
+    */
 }
 
 // goes with down key
@@ -355,10 +361,12 @@ function shiftUp() {
     
     drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
     
+    /*
     topBound.innerHTML = maxY;
     bottomBound.innerHTML = minY;
     leftBound.innerHTML = minX;
     rightBound.innerHTML = maxX;
+    */
 }
 
 // goes with left key
@@ -379,10 +387,12 @@ function shiftRight() {
     
     drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
     
+    /*
     topBound.innerHTML = maxY;
     bottomBound.innerHTML = minY;
     leftBound.innerHTML = minX;
     rightBound.innerHTML = maxX;
+    */
 }
 
 // goes with right key
@@ -403,10 +413,12 @@ function shiftLeft() {
     
     drawRectangles(allPoints, fractalCtx, rectWidth, rectHeight);
     
+    /*
     topBound.innerHTML = maxY;
     bottomBound.innerHTML = minY;
     leftBound.innerHTML = minX;
     rightBound.innerHTML = maxX;
+    */
 }
 
 createPointArray(canvasWidth, canvasHeight, xPixels, yPixels, maxX, maxY, minX, minY, allPoints);
