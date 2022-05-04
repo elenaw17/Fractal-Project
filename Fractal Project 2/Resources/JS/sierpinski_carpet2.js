@@ -8,9 +8,13 @@ var center_y = 200;
 var first_radius = 200;
 var radius_divisor = 3;
 var completed_iterations = 0;
-var total_iterations = 6;
+var total_iterations = 1;
 var point_array;
 var point_string;
+
+var increase_iterations = document.getElementById("increaseIterations");
+var decrease_iterations = document.getElementById("decreaseIterations");
+var iteration_count = document.getElementById("iterationCount");
 
 var fractal_var = document.getElementById("fractal");
 
@@ -146,6 +150,42 @@ radiusDivisor, completedIterations, totalIterations) {
 }
 
 
+// maximum iterations: 8
+function increaseFractalIterations() {
+    if (total_iterations <= 7) {
+
+        total_iterations++;
+        
+        point_array = createSierpinskiCarpet(point_array, center_x, center_y, 
+        first_radius, radius_divisor, completed_iterations, total_iterations);
+        completed_iterations++;
+
+        point_string = convertPointArrayToString(point_array[total_iterations - 1]);
+        fractal_var.setAttribute("points", point_string);
+        //documentation.innerHTML = point_string;
+        
+        iteration_count.innerHTML = total_iterations;
+        completed_iterations = point_array.length;
+    }
+}
+
+// minimum iterations: 1
+function decreaseFractalIterations() {
+    if (total_iterations >= 2) {
+        
+        total_iterations--;
+        
+        point_string = convertPointArrayToString(point_array[total_iterations - 1]);
+        fractal_var.setAttribute("points", point_string);
+        //documentation.innerHTML = point_string;
+        
+        iteration_count.innerHTML = total_iterations;
+    }
+}
+
+increase_iterations.addEventListener("click", increaseFractalIterations);
+decrease_iterations.addEventListener("click", decreaseFractalIterations);
+
 point_array = createSierpinskiCarpet(point_array, center_x, center_y, 
 first_radius, radius_divisor, completed_iterations, total_iterations);
 
@@ -153,3 +193,7 @@ point_string = convertPointArrayToString(point_array[total_iterations - 1]);
 //documentation.innerHTML = point_string;
 
 fractal_var.setAttribute("points", point_string); 
+
+iteration_count.innerHTML = total_iterations;
+
+

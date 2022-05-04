@@ -9,7 +9,7 @@ var center_y = 250;
 var first_radius = 150;
 var radius_divisor = 2;
 var completed_iterations = 0;
-var total_iterations = 3;
+var total_iterations = 1;
 var point_array;
 var point_string;
 
@@ -162,27 +162,26 @@ firstRadius, radiusDivisor, completedIterations, totalIterations) {
 // maximum iterations: 10
 function increaseFractalIterations() {
     if (total_iterations <= 9) {
-        completed_iterations = point_array.length;
+
         total_iterations++;
         
-        if (total_iterations > completed_iterations) {
-            point_array = createSierpinskiTriangle(point_array, center_x, center_y, 
-            first_radius, radius_divisor, completed_iterations, total_iterations);
-            completed_iterations++;
-        }
+        point_array = createSierpinskiTriangle(point_array, center_x, center_y, 
+        first_radius, radius_divisor, completed_iterations, total_iterations);
+        completed_iterations++;
+
         point_string = convertPointArrayToString(point_array[total_iterations - 1]);
         fractal_var.setAttribute("points", point_string);
         //documentation.innerHTML = point_string;
         
         iteration_count.innerHTML = total_iterations;
-        //completed_iterations = point_array.length;
+        completed_iterations = point_array.length;
     }
 }
 
 // minimum iterations: 1
 function decreaseFractalIterations() {
     if (total_iterations >= 2) {
-        //completed_iterations = point_array.length;
+        
         total_iterations--;
         
         point_string = convertPointArrayToString(point_array[total_iterations - 1]);
@@ -203,7 +202,3 @@ radius_divisor, completed_iterations, total_iterations);
 iteration_count.innerHTML = total_iterations;
 //completed_iterations = point_array.length;
 
-
-drawSierpinskiTriangle(fractal_var, point_array, center_x, center_y, first_radius, 
-radius_divisor, completed_iterations, total_iterations + 2);
-iteration_count.innerHTML = total_iterations;

@@ -21,15 +21,19 @@ a {
     color: black;
 }
 
-canvas {
+#fractalContainer, #fractal, #shapeFractal {
     display: block;
+}
+
+#iterationCount, #increaseIterations, #decreaseIterations, #zoomIn, #zoomOut, #up, #down, #left, #right {
+    display: inline-block;
 }
 
 svg {
     display: inline-block;
 }
 
-div {
+div .column {
     display: inline-block;
     /*border: 1px solid black;*/
     width: 30%;
