@@ -25,8 +25,25 @@ a {
     display: block;
 }
 
-#iterationCount, #increaseIterations, #decreaseIterations, #zoomIn, #zoomOut, #up, #down, #left, #right {
+#increaseIterations, #decreaseIterations, #zoomIn, #zoomOut, #up, #down, #left, #right {
     display: inline-block;
+    position: relative;
+    top: 14px;
+    margin: 10px;
+    /* border: 1px solid black; */
+}
+
+#iterationCount {
+    display: inline-block;
+    width: 46px;
+    height: 32px;
+    padding-left: 6px;
+    /* border: 1px solid black; */
+    font-size: 32px;
+    font-family: Helvetica, Arial, sans-serif;
+    position: relative;
+    top: 0px;
+    margin: 10px;
 }
 
 svg {
@@ -37,4 +54,19 @@ div .column {
     display: inline-block;
     /*border: 1px solid black;*/
     width: 30%;
+    position: absolute;
+    top: 70px;
 }
+
+#column1 {
+    left: 5%;
+}
+
+#column2 {
+    left: 35%;
+}
+
+#column3 {
+    left: 65%;
+}
+
