@@ -4,56 +4,104 @@ Fractal Generator Website CSS
 5/3/22
 */
 
+/*
+organize into 3 sections: 
+font family, font size, typography properties, color
+dimensions, padding, borders, margins, other box model properties
+display, position, z-index, float, clear
+*/
+
 h1 {
-    font-size: 36px;
     font-family: Helvetica, Arial, sans-serif;
-    padding: 20px 10px 10px;
+    font-size: 36px;
     text-align: center;
+    background-color: hsl(240, 20%, 50%);
+    
+    padding: 20px 10px 10px;
 }
 
 h2 {
-    font-size: 24px;
     font-family: Helvetica, Arial, sans-serif;
+    font-size: 24px;
+    background-color: hsl(240, 20%, 50%);
+    
     padding: 20px 10px 10px;
 }
 
 a {
     color: black;
+    background-color:hsl(240, 20%, 50%);
 }
 
 #fractalContainer, #fractal, #shapeFractal {
     display: block;
 }
 
-#increaseIterations, #decreaseIterations, #zoomIn, #zoomOut, #up, #down, #left, #right {
+#increaseIterations, #decreaseIterations {
+    margin: 10px;
+    /* border: 1px solid black; */
+    
     display: inline-block;
     position: relative;
     top: 14px;
+}
+
+#zoomIn, #zoomOut, #up, #down, #left, #right {
     margin: 10px;
-    /* border: 1px solid black; */
+
+    display: inline-block;
 }
 
 #iterationCount {
-    display: inline-block;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 32px;
+    text-align: center;
+
     width: 46px;
     height: 32px;
     padding-left: 6px;
     /* border: 1px solid black; */
-    font-size: 32px;
-    font-family: Helvetica, Arial, sans-serif;
+    margin: 10px;
+
+    display: inline-block;
     position: relative;
     top: 0px;
-    margin: 10px;
+}
+
+#iterations {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 24px;
+
+    margin-bottom: 0px;
+    margin-right: 10px;
+
+    display: inline-block;
+}
+
+.controlPanel {
+    padding: 0px 15px 15px;
+    border: 1px solid black;
+    margin: 20px 0px;
+    
+    display: inline-block;
+}
+
+#allColumns {
+    display: absolute;
+    top: 80px;
 }
 
 svg {
     display: inline-block;
 }
 
-div .column {
-    display: inline-block;
-    /*border: 1px solid black;*/
+.column {
+    background-color: hsl(240, 20%, 75%);
+
     width: 30%;
+    /*border: 1px solid black;*/
+
+    display: inline-block;
     position: absolute;
     top: 70px;
 }
