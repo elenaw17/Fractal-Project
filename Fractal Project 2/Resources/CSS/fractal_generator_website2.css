@@ -11,6 +11,10 @@ dimensions, padding, borders, margins, other box model properties
 display, position, z-index, float, clear
 */
 
+body {
+    background-color:hsl(240, 20%, 80%);
+}
+
 h1 {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 36px;
@@ -18,19 +22,21 @@ h1 {
     background-color: hsl(240, 20%, 50%);
     
     padding: 20px 10px 10px;
+    border: 5px solid hsl(240, 20%, 30%);
 }
 
 h2 {
     font-family: Helvetica, Arial, sans-serif;
     font-size: 24px;
+    text-align: center;
     background-color: hsl(240, 20%, 50%);
     
-    padding: 20px 10px 10px;
+    padding: 10px 5px 5px;
+    border: 5px solid hsl(240, 20%, 30%);
 }
 
 a {
     color: black;
-    background-color:hsl(240, 20%, 50%);
 }
 
 #fractalContainer, #fractal, #shapeFractal {
@@ -96,25 +102,27 @@ svg {
 }
 
 .column {
-    background-color: hsl(240, 20%, 75%);
 
-    width: 30%;
-    /*border: 1px solid black;*/
+    width: 25%;
+    /*border: 1px solid black;
+    margin: 4%;*/
 
     display: inline-block;
     position: absolute;
-    top: 70px;
+    top: 100px;
 }
 
+
 #column1 {
-    left: 5%;
+    left: 4.5%;
 }
 
 #column2 {
-    left: 35%;
+    left: 37.5%;
 }
 
 #column3 {
-    left: 65%;
+    left: 70.5%;
 }
+
 
